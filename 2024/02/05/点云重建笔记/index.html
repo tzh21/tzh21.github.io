@@ -20,16 +20,16 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="SDF SDF 全称 Signed Distance Function，是一个函数 \(\mathbb{R}^{3} \to \mathbb{R}\) 。一个物体唯一对应一个 SDF。SDF 输入为三维空间中点的坐标，输出为到该物体表面的距离（正负号表示内外）。 已知一个物体的 SDF，则可完全掌握物体的表面信息。一个物体的 SDF 的零点即该物体的表面。 点云重建的思路是通过有限点对">
+  <meta name="description" content="DeepSDF SDF 全称 Signed Distance Function，是一个函数 \(\mathbb{R}^{3} \to \mathbb{R}\) 。一个物体唯一对应一个 SDF。SDF 输入为三维空间中点的坐标，输出为到该物体表面的距离（正负号表示内外）。 已知一个物体的 SDF，则可完全掌握物体的表面信息。一个物体的 SDF 的零点即该物体的表面。 点云重建的思路是通过">
 <meta property="og:type" content="article">
 <meta property="og:title" content="点云重建笔记">
 <meta property="og:url" content="http://example.com/2024/02/05/%E7%82%B9%E4%BA%91%E9%87%8D%E5%BB%BA%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="SDF SDF 全称 Signed Distance Function，是一个函数 \(\mathbb{R}^{3} \to \mathbb{R}\) 。一个物体唯一对应一个 SDF。SDF 输入为三维空间中点的坐标，输出为到该物体表面的距离（正负号表示内外）。 已知一个物体的 SDF，则可完全掌握物体的表面信息。一个物体的 SDF 的零点即该物体的表面。 点云重建的思路是通过有限点对">
+<meta property="og:description" content="DeepSDF SDF 全称 Signed Distance Function，是一个函数 \(\mathbb{R}^{3} \to \mathbb{R}\) 。一个物体唯一对应一个 SDF。SDF 输入为三维空间中点的坐标，输出为到该物体表面的距离（正负号表示内外）。 已知一个物体的 SDF，则可完全掌握物体的表面信息。一个物体的 SDF 的零点即该物体的表面。 点云重建的思路是通过">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2024/02/05/%E7%82%B9%E4%BA%91%E9%87%8D%E5%BB%BA%E7%AC%94%E8%AE%B0/image.png">
 <meta property="article:published_time" content="2024-02-05T08:53:15.000Z">
-<meta property="article:modified_time" content="2024-02-06T01:31:15.771Z">
+<meta property="article:modified_time" content="2024-02-09T09:27:42.947Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2024/02/05/%E7%82%B9%E4%BA%91%E9%87%8D%E5%BB%BA%E7%AC%94%E8%AE%B0/image.png">
@@ -182,7 +182,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-02-06 09:31:15" itemprop="dateModified" datetime="2024-02-06T09:31:15+08:00">2024-02-06</time>
+                <time title="Modified: 2024-02-09 17:27:42" itemprop="dateModified" datetime="2024-02-09T17:27:42+08:00">2024-02-09</time>
               </span>
 
           
@@ -196,7 +196,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="sdf">SDF</h2>
+        <h2 id="deepsdf">DeepSDF</h2>
 <p>SDF 全称 Signed Distance Function，是一个函数 <span
 class="math inline">\(\mathbb{R}^{3} \to \mathbb{R}\)</span>
 。一个物体唯一对应一个 SDF。SDF
@@ -205,7 +205,6 @@ class="math inline">\(\mathbb{R}^{3} \to \mathbb{R}\)</span>
 的零点即该物体的表面。</p>
 <p>点云重建的思路是通过有限点对应的 SDF 值拟合 SDF，拟合 SDF
 的零点即为物体表面的近似。</p>
-<h2 id="deepsdf">DeepSDF</h2>
 <p>借助 latent vector，可以让一个神经网络建模多个 SDF。设神经网络为
 <span class="math inline">\(f_{\theta}\)</span>，第 <span
 class="math inline">\(i\)</span> 个形状对应 latent vector <span
@@ -219,13 +218,41 @@ class="math inline">\(z_{i}\)</span>。</p>
 encoder）。但作者认为这种方法需要多训练一个网络，浪费了资源。作者提出用
 auto decoder 解决。即将一个神经网络分成两层，第一层预测 latent
 vector，第二层用得到的 latent vector 和位置坐标预测 SDF。</p>
+<h2 id="nglod-neural-geometric-level-of-detail">NGLOD (Neural Geometric
+Level of Detail)</h2>
+<p>推荐和 DeepSDF 一起看。NGLOD 借鉴了 DeepSDF。</p>
+<p>作者将 DeepSDF 中的 latent vector 替换成 volumn (集合) of feature
+vectors。作者将非空的空间通过 voxel (体素) 进行划分，并将体素按照 sparse
+voxel octree (SVO) 的数据结构进行组织，树的高度取给定的
+LOD。这意味一个大体素中可能包含八个更小的体素，空间中的一个点可能被多个不同大小的体素包含。一个体素的八个顶点各自有一个
+feature vector。</p>
+<p>下面展示求坐标为 <span class="math inline">\(x\)</span> 点的 SDF
+值的过程。首先找到包含 <span class="math inline">\(x\)</span>
+点的所有体素，其个数应该为 <span class="math inline">\(x\)</span> 点的
+LOD 值，记为 <span
+class="math inline">\(L\)</span>。在每个体素中使用三维线性插值，得到该体素中
+<span class="math inline">\(x\)</span> 点的 feature vector
+的估计值，然后将所有体素的 feature vector
+相加，输入一个浅网络中，即可得到近似的 SDF 值。</p>
+<p>将上面求 SDF 值的过程与 DeepSDF 对比可以发现，DeepSDF 用一个 latent
+vector 表示整个形状，而 NGLOD 中一个 feature vector
+只表示一个体素，该体素可能非常小。这导致 NGLOD 能够使用更浅的网络计算
+SDF，计算速度比 DeepSDF 快得多。而且 LOD
+可以随着对精确度和速度的需求而变化。</p>
 <h2 id="occnet">OccNet</h2>
-<p>以往的 3D 图形表示方法大致分为三类：voxel, point,
+<p>OccNet 这篇文章的主要工作包括：</p>
+<ol type="1">
+<li>提出了一种三维连续函数 OccNet，用来表示物体占据的空间。</li>
+<li>展示了 OccNet 如何接受各种格式的输入并重建 3D geometry。</li>
+<li>证明了这种重建方法的价值。</li>
+</ol>
+<p>以往的 3D 图形表示方法大致分为三类：voxel (体素), point (点云),
 mesh（网格）。不能兼顾内存效率和生成效率。voxel
 的缺点在于占用空间随分辨率增长速度过快。point
 缺点在于需要进一步处理才能得到几何图形。mesh
 缺点在于依赖模板，因此不允许表示任意的图形。</p>
-<p>occupancy function 是用来表达连续三维空间中任一点是否在物体内的函数。
+<p>不同于将空间离散化表示的 voxel 方法，occupancy function
+是用来表达<strong>连续</strong>三维空间中任一点是否在物体内的函数。
 occupancy function 是一个函数 <span class="math inline">\(\mathbb{R}^{3}
 \to \{ 0,1
 \}\)</span>，输入为空间中一点的坐标，输出为该点是否在物体内部。</p>
@@ -234,12 +261,25 @@ occupancy function 是一个函数 <span class="math inline">\(\mathbb{R}^{3}
 是一个函数 <span class="math inline">\(\mathbb{R}^{3} \times \chi \to
 [0,1]\)</span>，输入为所求点的坐标（<span
 class="math inline">\(\mathbb{R}^{3}\)</span>）和训练网络用的样本（<span
-class="math inline">\(\chi\)</span>），输出为所求点在物体内部的概率。</p>
-<p>损失函数使用二分类问题中常见的交叉熵函数，取样方法使用均匀分布。</p>
-<p>从 occupancy network 中提取等值面时使用自创的 Multiresolution
-IsoSurface Extraction (MISE) 算法，其过程图解如下：</p>
-<!-- ![MISE 过程图解](image.png) -->
+class="math inline">\(\chi\)</span>），输出为所求点在物体内部的概率。损失函数使用二分类问题中常见的交叉熵函数，取样方法使用均匀分布。</p>
+<p>作者为了从 occupancy network 中提取等值面，提出 Multiresolution
+IsoSurface Extraction (MISE) 算法。和 NGLOD 一样，借助了三叉树 SVO
+这一工具，采用了由粗入细的思想，达到效率和精确度的平衡，避免浪费算力。其过程图解如下：</p>
 <img src="/2024/02/05/%E7%82%B9%E4%BA%91%E9%87%8D%E5%BB%BA%E7%AC%94%E8%AE%B0/image.png" class="">
+<h2 id="lig-local-implicit-grid">LIG (Local Implicit Grid)</h2>
+<p>核心思想：两个物体或者复杂的 3d
+场景，在足够小的局部形状一定有相似之处，比如椅子和桌子可能在棱角有相似之处。给出一个场景的点云，如果能够事先对各种局部形状进行编码，同时通过自编码器将点云分割转换成局部对应的编码，就可以将这些局部形状拼接成真实场景。</p>
+<h2 id="neural-pull">Neural-Pull</h2>
+<p>Neural-Pull 的主要工作是提出了一种通过点云学习 SDF
+的网络。和其他网络对比，其主要优势在于不需要提供点云中每个点的真实
+SDF，只需要点云的坐标信息。</p>
+<ol type="1">
+<li>输入：一个点的三维坐标。</li>
+<li>参数：输入点的 SDF 值和空间梯度值。</li>
+<li>取样：在点云中的每个点周围用高斯分布取样。</li>
+<li>损失函数：预测输入点的 SDF 值和梯度值，沿梯度方向移动 SDF
+大小的长度，得到预测的最近表面点，将预测的最近表面点和真实的最近表面点（也就是点云）的差作为损失函数。</li>
+</ol>
 
     </div>
 
@@ -317,7 +357,8 @@ IsoSurface Extraction (MISE) 算法，其过程图解如下：</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sdf"><span class="nav-number">1.</span> <span class="nav-text">SDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deepsdf"><span class="nav-number">2.</span> <span class="nav-text">DeepSDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#occnet"><span class="nav-number">3.</span> <span class="nav-text">OccNet</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#deepsdf"><span class="nav-number">1.</span> <span class="nav-text">DeepSDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nglod-neural-geometric-level-of-detail"><span class="nav-number">2.</span> <span class="nav-text">NGLOD (Neural Geometric
+Level of Detail)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#occnet"><span class="nav-number">3.</span> <span class="nav-text">OccNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lig-local-implicit-grid"><span class="nav-number">4.</span> <span class="nav-text">LIG (Local Implicit Grid)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#neural-pull"><span class="nav-number">5.</span> <span class="nav-text">Neural-Pull</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
