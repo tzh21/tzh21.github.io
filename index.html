@@ -176,7 +176,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-02-09 17:27:42" itemprop="dateModified" datetime="2024-02-09T17:27:42+08:00">2024-02-09</time>
+                <time title="Modified: 2024-02-24 23:20:25" itemprop="dateModified" datetime="2024-02-24T23:20:25+08:00">2024-02-24</time>
               </span>
 
           
@@ -191,16 +191,22 @@
 
       
           <h2 id="deepsdf">DeepSDF</h2>
+<p>这篇文章主要介绍了一种渲染和重建三维物体的方式。</p>
 <p>SDF 全称 Signed Distance Function，是一个函数 <span
 class="math inline">\(\mathbb{R}^{3} \to \mathbb{R}\)</span>
 。一个物体唯一对应一个 SDF。SDF
 输入为三维空间中点的坐标，输出为到该物体表面的距离（正负号表示内外）。</p>
 <p>已知一个物体的 SDF，则可完全掌握物体的表面信息。一个物体的 SDF
-的零点即该物体的表面。</p>
-<p>点云重建的思路是通过有限点对应的 SDF 值拟合 SDF，拟合 SDF
-的零点即为物体表面的近似。</p>
-<p>借助 latent vector，可以让一个神经网络建模多个 SDF。设神经网络为
-<span class="math inline">\(f_{\theta}\)</span>，第 <span
+的零点即该物体的表面。希望训练一个网络，输入点的坐标，输出对应的 SDF
+值。借助这个网络可以很容易渲染物体的表面（找到零点即可）。</p>
+<p>DeepSDF 使用一个网络拟合若干个相似物体的
+SDF。比起用一个网络拟合一个物体的 SDF，DeepSDF 的做法更高效。</p>
+<p>训练这个网络所用的样本来自若干个相似物体，每个物体均需要提供若干点的坐标和真实的
+SDF 值。网络的输入为点的坐标和对应物体的编码，输出为该点在该物体中的 SDF
+值。</p>
+<p>DeepSDF 将形状编码称作 latent vector。借助 latent
+vector，可以让一个神经网络表示多个 SDF。设神经网络为 <span
+class="math inline">\(f_{\theta}\)</span>，第 <span
 class="math inline">\(i\)</span> 个形状对应 latent vector <span
 class="math inline">\(z_{i}\)</span>，取空间中的点为 <span
 class="math inline">\(x\)</span>，目标是训练神经网络使得 <span
@@ -264,16 +270,15 @@ IsoSurface Extraction (MISE) 算法。和 NGLOD 一样，借助了三叉树 SVO
 <p>核心思想：两个物体或者复杂的 3d
 场景，在足够小的局部形状一定有相似之处，比如椅子和桌子可能在棱角有相似之处。给出一个场景的点云，如果能够事先对各种局部形状进行编码，同时通过自编码器将点云分割转换成局部对应的编码，就可以将这些局部形状拼接成真实场景。</p>
 <h2 id="neural-pull">Neural-Pull</h2>
-<p>Neural-Pull 的主要工作是提出了一种通过点云学习 SDF
-的网络。和其他网络对比，其主要优势在于不需要提供点云中每个点的真实
-SDF，只需要点云的坐标信息。</p>
-<ol type="1">
-<li>输入：一个点的三维坐标。</li>
-<li>参数：输入点的 SDF 值和空间梯度值。</li>
-<li>取样：在点云中的每个点周围用高斯分布取样。</li>
-<li>损失函数：预测输入点的 SDF 值和梯度值，沿梯度方向移动 SDF
-大小的长度，得到预测的最近表面点，将预测的最近表面点和真实的最近表面点（也就是点云）的差作为损失函数。</li>
-</ol>
+<p>Neural-Pull 的主要工作是提出了一种通过原始点云（raw point cloud）学习
+SDF 的网络。和其他网络对比，其主要优势在于不需要提供点云中每个点的真实
+SDF，只需要点云的坐标信息。实际上，Neural-Pull
+是将所有点云中的点都当成是物体表面上的点。</p>
+<p>网络的输入为一个样本点的三维坐标和限定条件编码，输出为该点的 SDF
+值。训练中用到参数为该点的 SDF 值和该点到表面上最近的点的 SDF
+梯度。梯度的方向为 SDF
+变化最快的方向，可近似认为是到表面最近点的方向。训练时使用的数据不需要额外提供，直接从点云中的每个点附近进行取样。采样的中心点即为样本点的最近点。损失函数为网络输出最近点和实际最近点的距离的平均值，根据损失函数调整
+SDF 和 SDF 的梯度。</p>
 
       
     </div>
