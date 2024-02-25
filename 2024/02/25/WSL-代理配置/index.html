@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"tzh21.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+  <meta name="description" content="WSL2 不能默认使用宿主机的代理，但好在微软提供了解决方法，这里记录一下。 前置条件  宿主机安装的是 Windows 11 系统，且版本至少为 22H2。本解决方案不适用于 Windows 10。 宿主机上的 WSL2 升级至最新版本。在写这个帖子时，我的 WSL 版本为 2.0.9.0。 你已经会使用 clash for windows。  操作步骤 在用户文件夹（一般">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://tzh21.github.io/2024/02/05/hello-world/index.html">
+<meta property="og:title" content="WSL 代理配置">
+<meta property="og:url" content="http://tzh21.github.io/2024/02/25/WSL-%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE/index.html">
 <meta property="og:site_name" content="tzh21&#39;s blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta property="og:description" content="WSL2 不能默认使用宿主机的代理，但好在微软提供了解决方法，这里记录一下。 前置条件  宿主机安装的是 Windows 11 系统，且版本至少为 22H2。本解决方案不适用于 Windows 10。 宿主机上的 WSL2 升级至最新版本。在写这个帖子时，我的 WSL 版本为 2.0.9.0。 你已经会使用 clash for windows。  操作步骤 在用户文件夹（一般">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-02-05T08:50:22.661Z">
-<meta property="article:modified_time" content="2024-02-05T08:50:22.661Z">
+<meta property="article:published_time" content="2024-02-25T15:23:29.000Z">
+<meta property="article:modified_time" content="2024-02-25T15:43:21.748Z">
 <meta property="article:author" content="tzh">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://tzh21.github.io/2024/02/05/hello-world/">
+<link rel="canonical" href="http://tzh21.github.io/2024/02/25/WSL-%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>Hello World | tzh21's blog</title>
+  <title>WSL 代理配置 | tzh21's blog</title>
   
 
 
@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://tzh21.github.io/2024/02/05/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://tzh21.github.io/2024/02/25/WSL-%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -163,7 +163,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hello World
+          WSL 代理配置
         </h1>
 
         <div class="post-meta">
@@ -172,8 +172,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-02-05 16:50:22" itemprop="dateCreated datePublished" datetime="2024-02-05T16:50:22+08:00">2024-02-05</time>
+              <time title="创建时间：2024-02-25 23:23:29 / 修改时间：23:43:21" itemprop="dateCreated datePublished" datetime="2024-02-25T23:23:29+08:00">2024-02-25</time>
             </span>
 
           
@@ -187,29 +188,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very
-first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for
-more info. If you get any problems when using Hexo, you can find the
-answer in <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or
-you can ask me on <a
-target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a
-target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+        <p>WSL2
+不能默认使用宿主机的代理，但好在微软提供了解决方法，这里记录一下。</p>
+<h2 id="前置条件">前置条件</h2>
+<ol type="1">
+<li>宿主机安装的是 Windows 11 系统，且版本至少为
+22H2。本解决方案不适用于 Windows 10。</li>
+<li>宿主机上的 WSL2 升级至最新版本。在写这个帖子时，我的 WSL 版本为
+2.0.9.0。</li>
+<li>你已经会使用 clash for windows。</li>
+</ol>
+<h2 id="操作步骤">操作步骤</h2>
+<p>在用户文件夹（一般为 <code>C:\Users\&lt;user_name&gt;</code>）中找到
+<code>.wslconfig</code> 文件，如果没有则自己新建一个。</p>
+<p>在文件中写入如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">  networkingMode=mirrored</span><br><span class="line">  autoProxy=true</span><br></pre></td></tr></table></figure>
+<p>此时 WSL 就能走 clash 的代理。</p>
+<h2 id="参考链接">参考链接</h2>
+<p>使用桥接模式（要用到 hyper-V 虚拟机。Windows
+家庭版用不了）https://zhuanlan.zhihu.com/p/593263088</p>
+<p>找到宿主机的ip，在 bash 脚本中设置代理（不如本方案便捷）
+https://zhuanlan.zhihu.com/p/153124468</p>
+<p>wsl2 的更多配置选项
+https://learn.microsoft.com/zh-cn/windows/wsl/wsl-config</p>
 
     </div>
 
@@ -224,11 +225,11 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2024/02/05/%E7%82%B9%E4%BA%91%E9%87%8D%E5%BB%BA%E7%AC%94%E8%AE%B0/" rel="next" title="点云重建笔记">
-      点云重建笔记 <i class="fa fa-chevron-right"></i>
+    <a href="/2024/02/05/%E7%82%B9%E4%BA%91%E9%87%8D%E5%BB%BA%E7%AC%94%E8%AE%B0/" rel="prev" title="点云重建笔记">
+      <i class="fa fa-chevron-left"></i> 点云重建笔记
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -287,7 +288,7 @@ target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#quick-start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">前置条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.</span> <span class="nav-text">操作步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
