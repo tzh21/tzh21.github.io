@@ -69,6 +69,49 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-在-Conda-环境中使用-pip" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/06/28/%E5%9C%A8-Conda-%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8-pip/" class="article-date">
+  <time class="dt-published" datetime="2024-06-28T07:47:30.000Z" itemprop="datePublished">2024-06-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/06/28/%E5%9C%A8-Conda-%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8-pip/">在 Conda 环境下使用 pip</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="问题：pip-安装模块后无法使用"><a href="#问题：pip-安装模块后无法使用" class="headerlink" title="问题：pip 安装模块后无法使用"></a>问题：pip 安装模块后无法使用</h2><p>在 conda 虚拟环境中，使用 <code>pip install xxx</code> 后仍然无法使用该模块。</p>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>原因可能是使用的 <code>pip</code> 不是当前 <code>conda</code> 环境中的 <code>pip</code>。</p>
+<p>使用 <code>which python</code> 检查 python 路径。应该输出 conda 环境中的 python 路径。格式类似于 <code>/home/&lt;username&gt;/miniconda3/envs/&lt;env_name&gt;/bin/python</code></p>
+<p>使用 <code>which pip</code> 检查 pip 路径。如果输出的不是 <code>/home/&lt;username&gt;/miniconda3/envs/&lt;env_name&gt;/bin/pip</code>（我这里是 <code>/home/markllm/.local/bin/pip</code>，也就是本地 python 的 pip），说明 <code>pip</code> 不是当前 <code>conda</code> 环境中的 <code>pip</code>。</p>
+<p>使用 <code>python -m pip install xxx</code> 替代 <code>pip install</code>，就能指定使用当前 conda 环境中的 pip。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/06/28/%E5%9C%A8-Conda-%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8-pip/" data-id="clxyeemao0000qzie1kqgdt7w" data-title="在 Conda 环境下使用 pip" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MacOS-VPN-连接内网服务器进行开发" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/06/28/MacOS-VPN-%E8%BF%9E%E6%8E%A5%E5%86%85%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%BC%80%E5%8F%91/" class="article-date">
@@ -241,6 +284,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2024/06/28/%E5%9C%A8-Conda-%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8-pip/">在 Conda 环境下使用 pip</a>
+          </li>
         
           <li>
             <a href="/2024/06/28/MacOS-VPN-%E8%BF%9E%E6%8E%A5%E5%86%85%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%BC%80%E5%8F%91/">MacOS VPN 连接内网服务器进行开发</a>
