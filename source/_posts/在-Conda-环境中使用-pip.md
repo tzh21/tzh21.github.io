@@ -1,0 +1,19 @@
+---
+title: 在 Conda 环境下使用 pip
+date: 2024-06-28 15:47:30
+tags:
+---
+
+## 问题：pip 安装模块后无法使用
+
+在 conda 虚拟环境中，使用 `pip install xxx` 后仍然无法使用该模块。
+
+### 解决
+
+原因可能是使用的 `pip` 不是当前 `conda` 环境中的 `pip`。
+
+使用 `which python` 检查 python 路径。应该输出 conda 环境中的 python 路径。格式类似于 `/home/<username>/miniconda3/envs/<env_name>/bin/python`
+
+使用 `which pip` 检查 pip 路径。如果输出的不是 `/home/<username>/miniconda3/envs/<env_name>/bin/pip`（我这里是 `/home/markllm/.local/bin/pip`，也就是本地 python 的 pip），说明 `pip` 不是当前 `conda` 环境中的 `pip`。
+
+使用 `python -m pip install xxx` 替代 `pip install`，就能指定使用当前 conda 环境中的 pip。
