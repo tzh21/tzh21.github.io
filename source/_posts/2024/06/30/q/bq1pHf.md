@@ -1,9 +1,9 @@
 ---
 title: "ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记"
-date: 2024-06-30 10:10:09
+date: 2024-06-30 10:26:22
 tags:
 ---
 
-![](SEXxfj9Y/image.png)
+![](bq1pHf/image.png)
 
-将整个文本视为 b 进制的
+测试
