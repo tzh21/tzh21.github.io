@@ -4,4 +4,6 @@ date: 2024-06-30 10:10:09
 tags:
 ---
 
-![](assets/image.png)
+![](SEXxfj9Y/image.png)
+
+将整个文本视为 b 进制的
