@@ -4,16 +4,18 @@
   <meta charset="utf-8">
   
   
-  <title>post | Hexo</title>
+  <title>ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="post">
+  <meta name="description" content="嵌入水印 将整个单词表划分成 r 份。 我们的目标是将一段水印信息嵌入到生成的文本中。将这段水印信息编码为长度为 b，每位取值为 ${0,…,r-1}$ 的串。记这个编码串为 m。 生成一个 token 时，随机取 ${0,…,b-1}$ 中的一个数 p。倾向于从 $m[p]$ 单词表中选 token。 检测水印m 中不同位置有不同数字，代表不同词汇表子集。数字出现的频率分布和词汇的分布正相关。假">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记">
 <meta property="og:url" content="http://example.com/2024/06/30/2024/06/30/103754/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="嵌入水印 将整个单词表划分成 r 份。 我们的目标是将一段水印信息嵌入到生成的文本中。将这段水印信息编码为长度为 b，每位取值为 ${0,…,r-1}$ 的串。记这个编码串为 m。 生成一个 token 时，随机取 ${0,…,b-1}$ 中的一个数 p。倾向于从 $m[p]$ 单词表中选 token。 检测水印m 中不同位置有不同数字，代表不同词汇表子集。数字出现的频率分布和词汇的分布正相关。假">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2024/06/30/2024/06/30/103754/image.png">
 <meta property="article:published_time" content="2024-06-30T02:37:54.000Z">
-<meta property="article:modified_time" content="2024-06-30T03:07:47.990Z">
+<meta property="article:modified_time" content="2024-06-30T09:26:42.633Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2024/06/30/2024/06/30/103754/image.png">
@@ -85,7 +87,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      post
+      ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记
     </h1>
   
 
@@ -93,12 +95,18 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p><img src="/2024/06/30/2024/06/30/103754/image.png"></p>
+        <h2 id="嵌入水印"><a href="#嵌入水印" class="headerlink" title="嵌入水印"></a>嵌入水印</h2><p><img src="/2024/06/30/2024/06/30/103754/image.png"></p>
+<p>将整个单词表划分成 r 份。</p>
+<p>我们的目标是将一段水印信息嵌入到生成的文本中。将这段水印信息编码为长度为 b，每位取值为 ${0,…,r-1}$ 的串。记这个编码串为 m。</p>
+<p>生成一个 token 时，随机取 ${0,…,b-1}$ 中的一个数 p。倾向于从 $m[p]$ 单词表中选 token。</p>
+<h2 id="检测水印"><a href="#检测水印" class="headerlink" title="检测水印"></a>检测水印</h2><p>m 中不同位置有不同数字，代表不同词汇表子集。数字出现的频率分布和词汇的分布正相关。假如 m 中很多位置的值都是 3，那么最后生成的文本中很多 token 都来自于第 3 个词汇表子集。可以通过检测词频来判断是否存在水印。</p>
+<p>为 m 中每个位置 i 维护 r 个计数器 ${W_i[0],…,W_i[r-1]}$。如果一个 token 对应 m 中的位置 i，且位于 j 词汇表时，$W_i[j]$ 加 1。如果该文本中有水印，那么使得 $W_i$ 最大的词汇表 j 应该为 $m[i]$ 词汇表。</p>
+<p>什么情况下，$W_i[m[i]]$ 以外的计数器有值？token 的颜色和对应 m 位置的颜色不匹配，即使增加了 $\delta$，仍然没有从对应颜色中选词（比如低熵文本）。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2024/06/30/2024/06/30/103754/" data-id="cly0yzpil00035xiecke7ftsf" data-title="post" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2024/06/30/2024/06/30/103754/" data-id="cly0yzpil00035xiecke7ftsf" data-title="ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -149,7 +157,7 @@
       <ul>
         
           <li>
-            <a href="/2024/06/30/2024/06/30/103754/">post</a>
+            <a href="/2024/06/30/2024/06/30/103754/">ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记</a>
           </li>
         
           <li>
