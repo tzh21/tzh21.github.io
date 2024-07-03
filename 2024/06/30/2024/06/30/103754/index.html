@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://tzh21.github.io/2024/06/30/2024/06/30/103754/image.png">
 <meta property="article:published_time" content="2024-06-30T02:37:54.000Z">
-<meta property="article:modified_time" content="2024-07-03T02:09:28.733Z">
+<meta property="article:modified_time" content="2024-07-03T12:56:39.246Z">
 <meta property="article:author" content="tzh21">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://tzh21.github.io/2024/06/30/2024/06/30/103754/image.png">
@@ -106,7 +106,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B5%8C%E5%85%A5%E6%B0%B4%E5%8D%B0"><span class="nav-number">1.</span> <span class="nav-text">嵌入水印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E6%B0%B4%E5%8D%B0"><span class="nav-number">2.</span> <span class="nav-text">检测水印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%B8%BA%E6%AF%8F%E4%B8%AA-token-%E5%88%86%E9%85%8D-%E4%BD%8D%E7%BD%AE-p%EF%BC%88%E5%AF%B9%E5%BA%94%E8%AE%BA%E6%96%87-Position-Allocating-%E9%83%A8%E5%88%86%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">如何为每个 token 分配 位置 p（对应论文 Position Allocating 部分）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List-Decoding"><span class="nav-number">4.</span> <span class="nav-text">List Decoding</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B5%8C%E5%85%A5%E6%B0%B4%E5%8D%B0"><span class="nav-number">1.</span> <span class="nav-text">嵌入水印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E6%B0%B4%E5%8D%B0"><span class="nav-number">2.</span> <span class="nav-text">检测水印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%B8%BA%E6%AF%8F%E4%B8%AA-token-%E5%88%86%E9%85%8D-%E4%BD%8D%E7%BD%AE-p%EF%BC%88%E5%AF%B9%E5%BA%94%E8%AE%BA%E6%96%87-Position-Allocating-%E9%83%A8%E5%88%86%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">如何为每个 token 分配 位置 p（对应论文 Position Allocating 部分）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List-Decoding"><span class="nav-number">4.</span> <span class="nav-text">List Decoding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A8%E8%AE%BA"><span class="nav-number">5.</span> <span class="nav-text">讨论</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -183,7 +183,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-07-03 10:09:28" itemprop="dateModified" datetime="2024-07-03T10:09:28+08:00">2024-07-03</time>
+      <time title="Modified: 2024-07-03 20:56:39" itemprop="dateModified" datetime="2024-07-03T20:56:39+08:00">2024-07-03</time>
     </span>
 
   
@@ -205,6 +205,9 @@
 <h2 id="如何为每个-token-分配-位置-p（对应论文-Position-Allocating-部分）"><a href="#如何为每个-token-分配-位置-p（对应论文-Position-Allocating-部分）" class="headerlink" title="如何为每个 token 分配 位置 p（对应论文 Position Allocating 部分）"></a>如何为每个 token 分配 <code>位置 p</code>（对应论文 Position Allocating 部分）</h2><p>一个 Bad idea 是轮转分配。缺点是很容易被攻击破坏水印。</p>
 <p>论文中采取的方法是 hash。先通过伪随机函数（相当于 hash function）根据窗口内的文本生成一个 hash value。然后再将这个 hash value 作为随机数产生器用于产生位置 p。</p>
 <h2 id="List-Decoding"><a href="#List-Decoding" class="headerlink" title="List Decoding"></a>List Decoding</h2><p>解码的结果可能有错。为了减少错误的影响，可以让解码算法不仅仅返回一个结果，而是返回一系列相近的结果。</p>
+<h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h2><p>内容承载量和检测效果之间存在 trade-off。</p>
+<p>r 越大，意味着嵌入信息的长度越短，但是也意味着每个位置的可能指示的值。</p>
+<p>List Decoding 是有效的。置信度和错误率是负相关的，越高的置信度代表越低的错误率。和随机输出相比，List Decoding 是有效的。</p>
 
     </div>
 
