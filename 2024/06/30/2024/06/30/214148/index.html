@@ -19,29 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"tzh21.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="嵌入水印 将整个单词表划分成 r 份。 我们的目标是将一段水印信息嵌入到生成的文本中。将这段水印信息编码为长度为 b，每位取值为 ${0,…,r-1}$ 的串。记这个编码串为 m。 生成一个 token 时，随机取 ${0,…,b-1}$ 中的一个数 p。倾向于从 $m[p]$ 单词表中选 token。 检测水印m 中不同位置有不同数字，代表不同词汇表子集。数字出现的频率分布和词汇的分布正相关。假">
+    <meta name="description" content="动机KGW 模型使用在生成和检测水印时使用的是同一个 key（包括 hash function 和 random number generator）。只有 key 的持有者才能检测水印。这意味着检测的过程是不能公开的。 如果在生成和检测水印的过程中使用不同的 key，这样就可以只公开检测水印的 key，即能让公众检测水印，也不会泄露生成水印的 key。 生成水印已有一个语言模型，希望得到一个能够在">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记">
-<meta property="og:url" content="https://tzh21.github.io/2024/06/30/2024/06/30/103754/index.html">
+<meta property="og:title" content="AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记">
+<meta property="og:url" content="https://tzh21.github.io/2024/06/30/2024/06/30/214148/index.html">
 <meta property="og:site_name" content="tzh21&#39;s Blog">
-<meta property="og:description" content="嵌入水印 将整个单词表划分成 r 份。 我们的目标是将一段水印信息嵌入到生成的文本中。将这段水印信息编码为长度为 b，每位取值为 ${0,…,r-1}$ 的串。记这个编码串为 m。 生成一个 token 时，随机取 ${0,…,b-1}$ 中的一个数 p。倾向于从 $m[p]$ 单词表中选 token。 检测水印m 中不同位置有不同数字，代表不同词汇表子集。数字出现的频率分布和词汇的分布正相关。假">
+<meta property="og:description" content="动机KGW 模型使用在生成和检测水印时使用的是同一个 key（包括 hash function 和 random number generator）。只有 key 的持有者才能检测水印。这意味着检测的过程是不能公开的。 如果在生成和检测水印的过程中使用不同的 key，这样就可以只公开检测水印的 key，即能让公众检测水印，也不会泄露生成水印的 key。 生成水印已有一个语言模型，希望得到一个能够在">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://tzh21.github.io/2024/06/30/2024/06/30/103754/image.png">
-<meta property="article:published_time" content="2024-06-30T02:37:54.000Z">
-<meta property="article:modified_time" content="2024-07-03T02:09:28.733Z">
+<meta property="article:published_time" content="2024-06-30T13:41:48.000Z">
+<meta property="article:modified_time" content="2024-07-03T02:55:48.417Z">
 <meta property="article:author" content="tzh21">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tzh21.github.io/2024/06/30/2024/06/30/103754/image.png">
 
 
-<link rel="canonical" href="https://tzh21.github.io/2024/06/30/2024/06/30/103754/">
+<link rel="canonical" href="https://tzh21.github.io/2024/06/30/2024/06/30/214148/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://tzh21.github.io/2024/06/30/2024/06/30/103754/","path":"2024/06/30/2024/06/30/103754/","title":"ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://tzh21.github.io/2024/06/30/2024/06/30/214148/","path":"2024/06/30/2024/06/30/214148/","title":"AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记 | tzh21's Blog</title>
+<title>AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记 | tzh21's Blog</title>
   
 
 
@@ -106,7 +104,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B5%8C%E5%85%A5%E6%B0%B4%E5%8D%B0"><span class="nav-number">1.</span> <span class="nav-text">嵌入水印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E6%B0%B4%E5%8D%B0"><span class="nav-number">2.</span> <span class="nav-text">检测水印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%B8%BA%E6%AF%8F%E4%B8%AA-token-%E5%88%86%E9%85%8D-%E4%BD%8D%E7%BD%AE-p%EF%BC%88%E5%AF%B9%E5%BA%94%E8%AE%BA%E6%96%87-Position-Allocating-%E9%83%A8%E5%88%86%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">如何为每个 token 分配 位置 p（对应论文 Position Allocating 部分）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List-Decoding"><span class="nav-number">4.</span> <span class="nav-text">List Decoding</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%B0%B4%E5%8D%B0"><span class="nav-number">2.</span> <span class="nav-text">生成水印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%82%E7%BB%BF%E5%88%97%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">求绿列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8-z-%E6%A3%80%E9%AA%8C%E8%BF%9B%E8%A1%8C%E6%B0%B4%E5%8D%B0%E6%A3%80%E6%B5%8B"><span class="nav-number">4.</span> <span class="nav-text">利用 z 检验进行水印检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%BF%9B%E8%A1%8C%E6%B0%B4%E5%8D%B0%E6%A3%80%E6%B5%8B"><span class="nav-number">5.</span> <span class="nav-text">利用神经网络进行水印检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E4%BC%AA%E9%80%A0%E6%80%A7"><span class="nav-number">6.</span> <span class="nav-text">不可伪造性</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -147,7 +145,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://tzh21.github.io/2024/06/30/2024/06/30/103754/">
+    <link itemprop="mainEntityOfPage" href="https://tzh21.github.io/2024/06/30/2024/06/30/214148/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -160,12 +158,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记 | tzh21's Blog">
+      <meta itemprop="name" content="AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记 | tzh21's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记
+          AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记
         </h1>
 
         <div class="post-meta-container">
@@ -176,14 +174,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2024-06-30 10:37:54" itemprop="dateCreated datePublished" datetime="2024-06-30T10:37:54+08:00">2024-06-30</time>
+      <time title="Created: 2024-06-30 21:41:48" itemprop="dateCreated datePublished" datetime="2024-06-30T21:41:48+08:00">2024-06-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-07-03 10:09:28" itemprop="dateModified" datetime="2024-07-03T10:09:28+08:00">2024-07-03</time>
+      <time title="Modified: 2024-07-03 10:55:48" itemprop="dateModified" datetime="2024-07-03T10:55:48+08:00">2024-07-03</time>
     </span>
 
   
@@ -195,16 +193,20 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="嵌入水印"><a href="#嵌入水印" class="headerlink" title="嵌入水印"></a>嵌入水印</h2><p><img src="/2024/06/30/2024/06/30/103754/image.png"></p>
-<p>将整个单词表划分成 r 份。</p>
-<p>我们的目标是将一段水印信息嵌入到生成的文本中。将这段水印信息编码为长度为 b，每位取值为 ${0,…,r-1}$ 的串。记这个编码串为 m。</p>
-<p>生成一个 token 时，随机取 ${0,…,b-1}$ 中的一个数 p。倾向于从 $m[p]$ 单词表中选 token。</p>
-<h2 id="检测水印"><a href="#检测水印" class="headerlink" title="检测水印"></a>检测水印</h2><p>m 中不同位置有不同数字，代表不同词汇表子集。数字出现的频率分布和词汇的分布正相关。假如 m 中很多位置的值都是 3，那么最后生成的文本中很多 token 都来自于第 3 个词汇表子集。可以通过检测词频来判断是否存在水印。</p>
-<p>为 m 中每个位置 i 维护 r 个计数器 ${W_i[0],…,W_i[r-1]}$。如果一个 token 对应 m 中的位置 i，且位于 j 词汇表时，$W_i[j]$ 加 1。如果该文本中有水印，那么使得 $W_i$ 最大的词汇表 j 应该为 $m[i]$ 词汇表。</p>
-<p>根据假设检验的知识，设零假设为无水印，备择假设为有水印。零假设下每个位置计数器的分布应该为一个0 到 r-1 的多项分布，每个值的概率均为 $\gamma$。如果能够发现明显的偏差，就能推翻零假设。</p>
-<h2 id="如何为每个-token-分配-位置-p（对应论文-Position-Allocating-部分）"><a href="#如何为每个-token-分配-位置-p（对应论文-Position-Allocating-部分）" class="headerlink" title="如何为每个 token 分配 位置 p（对应论文 Position Allocating 部分）"></a>如何为每个 token 分配 <code>位置 p</code>（对应论文 Position Allocating 部分）</h2><p>一个 Bad idea 是轮转分配。缺点是很容易被攻击破坏水印。</p>
-<p>论文中采取的方法是 hash。先通过伪随机函数（相当于 hash function）根据窗口内的文本生成一个 hash value。然后再将这个 hash value 作为随机数产生器用于产生位置 p。</p>
-<h2 id="List-Decoding"><a href="#List-Decoding" class="headerlink" title="List Decoding"></a>List Decoding</h2><p>解码的结果可能有错。为了减少错误的影响，可以让解码算法不仅仅返回一个结果，而是返回一系列相近的结果。</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>KGW 模型使用在生成和检测水印时使用的是同一个 key（包括 hash function 和 random number generator）。只有 key 的持有者才能检测水印。这意味着检测的过程是不能公开的。</p>
+<p>如果在生成和检测水印的过程中使用不同的 key，这样就可以只公开检测水印的 key，即能让公众检测水印，也不会泄露生成水印的 key。</p>
+<h2 id="生成水印"><a href="#生成水印" class="headerlink" title="生成水印"></a>生成水印</h2><p>已有一个语言模型，希望得到一个能够在输出中嵌入水印的新语言模型。</p>
+<p>在生成文本的过程中，现在需要生成第 n 个 token $x_n$。</p>
+<p>记窗口大小为 w，根据前面 w - 1 个 token 计算第 n 个位置的 logits，取最高的 K 个备选 token，记为 ${x_n^{(0)},…, x_n^{(K-1)}}$</p>
+<p>在这 K 个备选 token 中，划分一部分作为绿列表（具体方法见后文），提高 logits 值。</p>
+<p>修正 logits 后的新语言模型即为所求。</p>
+<h2 id="求绿列表"><a href="#求绿列表" class="headerlink" title="求绿列表"></a>求绿列表</h2><p>求窗口内所有 token 的 embedding，然后将它们拼接起来，输入全连接神经网络 FFN 中，得到最后一个 token 是否为绿列表中的元素。</p>
+<p>$$<br>W(x_{n-w+1:n}) &#x3D; FFN(E(x_{n-w+1})\oplus …\oplus E(x_{n}))<br>$$</p>
+<p>难点是如何让神经网络保持生成 $\gamma$ 比例的绿列表。</p>
+<h2 id="利用-z-检验进行水印检测"><a href="#利用-z-检验进行水印检测" class="headerlink" title="利用 z 检验进行水印检测"></a>利用 z 检验进行水印检测</h2><p>考虑神经网络不能严格生成 $\gamma$ 比例的绿列表，只能在期望上等于 $\gamma$，所以需要在 z 检验中考虑绿列表比例的方差。</p>
+<h2 id="利用神经网络进行水印检测"><a href="#利用神经网络进行水印检测" class="headerlink" title="利用神经网络进行水印检测"></a>利用神经网络进行水印检测</h2><p>采用二分类长短期记忆网络（LSTM）检测水印。</p>
+<h2 id="不可伪造性"><a href="#不可伪造性" class="headerlink" title="不可伪造性"></a>不可伪造性</h2><p>神经网络是不可逆的。很难根据输出推断输入。</p>
+<p>用水印生成模型的结果训练水印检测模型。但已知水印检测模型，很难反过来推测出水印生成模型的训练输入和输出。</p>
 
     </div>
 
@@ -218,14 +220,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/06/28/2024/06/28/000001/" rel="prev" title="在 Conda 环境下使用 pip">
-                  <i class="fa fa-angle-left"></i> 在 Conda 环境下使用 pip
+                <a href="/2024/06/30/2024/06/30/103754/" rel="prev" title="ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记">
+                  <i class="fa fa-angle-left"></i> ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2024/06/30/2024/06/30/214148/" rel="next" title="AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记">
-                  AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
