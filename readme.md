@@ -1,3 +1,7 @@
+## 说明
+
+此分支保存 hexo 项目的源代码。main 分支保存 hexo 项目生成的静态网页。
+
 ## 前置要求
 
 已安装 Node.js
@@ -15,7 +19,7 @@ npm install
 创建 post
 
 ```sh
-sh newpost.sh
+make new
 ```
 
 提交更改到本地仓库和 github
@@ -23,3 +27,6 @@ sh newpost.sh
 ```sh
 sh update.sh
 ```
+
+本地运行
+
