@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tzh21.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="动机KGW 模型使用在生成和检测水印时使用的是同一个 key（包括 hash function 和 random number generator）。只有 key 的持有者才能检测水印。这意味着检测的过程是不能公开的。 如果在生成和检测水印的过程中使用不同的 key，这样就可以只公开检测水印的 key，即能让公众检测水印，也不会泄露生成水印的 key。 生成水印已有一个语言模型，希望得到一个能够在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记">
+<meta property="og:url" content="https://tzh21.github.io/2024/06/30/2024/06/30/214148/index.html">
+<meta property="og:site_name" content="tzh21&#39;s Blog">
+<meta property="og:description" content="动机KGW 模型使用在生成和检测水印时使用的是同一个 key（包括 hash function 和 random number generator）。只有 key 的持有者才能检测水印。这意味着检测的过程是不能公开的。 如果在生成和检测水印的过程中使用不同的 key，这样就可以只公开检测水印的 key，即能让公众检测水印，也不会泄露生成水印的 key。 生成水印已有一个语言模型，希望得到一个能够在">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-06-30T13:41:48.000Z">
+<meta property="article:modified_time" content="2025-01-14T06:41:36.454Z">
+<meta property="article:author" content="tzh21">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzh21.github.io/2024/06/30/2024/06/30/214148/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://tzh21.github.io/2024/06/30/2024/06/30/214148/","path":"2024/06/30/2024/06/30/214148/","title":"AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记 | tzh21's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tzh21's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%B0%B4%E5%8D%B0"><span class="nav-number">2.</span> <span class="nav-text">生成水印</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%82%E7%BB%BF%E5%88%97%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">求绿列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8-z-%E6%A3%80%E9%AA%8C%E8%BF%9B%E8%A1%8C%E6%B0%B4%E5%8D%B0%E6%A3%80%E6%B5%8B"><span class="nav-number">4.</span> <span class="nav-text">利用 z 检验进行水印检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%BF%9B%E8%A1%8C%E6%B0%B4%E5%8D%B0%E6%A3%80%E6%B5%8B"><span class="nav-number">5.</span> <span class="nav-text">利用神经网络进行水印检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E4%BC%AA%E9%80%A0%E6%80%A7"><span class="nav-number">6.</span> <span class="nav-text">不可伪造性</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tzh21</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzh21.github.io/2024/06/30/2024/06/30/214148/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tzh21">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记 | tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-06-30 21:41:48" itemprop="dateCreated datePublished" datetime="2024-06-30T21:41:48+08:00">2024-06-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-01-14 14:41:36" itemprop="dateModified" datetime="2025-01-14T14:41:36+08:00">2025-01-14</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>KGW 模型使用在生成和检测水印时使用的是同一个 key（包括 hash function 和 random number generator）。只有 key 的持有者才能检测水印。这意味着检测的过程是不能公开的。</p>
+<p>如果在生成和检测水印的过程中使用不同的 key，这样就可以只公开检测水印的 key，即能让公众检测水印，也不会泄露生成水印的 key。</p>
+<h2 id="生成水印"><a href="#生成水印" class="headerlink" title="生成水印"></a>生成水印</h2><p>已有一个语言模型，希望得到一个能够在输出中嵌入水印的新语言模型。</p>
+<p>在生成文本的过程中，现在需要生成第 n 个 token $x_n$。</p>
+<p>记窗口大小为 w，根据前面 w - 1 个 token 计算第 n 个位置的 logits，取最高的 K 个备选 token，记为 ${x_n^{(0)},…, x_n^{(K-1)}}$</p>
+<p>在这 K 个备选 token 中，划分一部分作为绿列表（具体方法见后文），提高 logits 值。</p>
+<p>修正 logits 后的新语言模型即为所求。</p>
+<h2 id="求绿列表"><a href="#求绿列表" class="headerlink" title="求绿列表"></a>求绿列表</h2><p>求窗口内所有 token 的 embedding，然后将它们拼接起来，输入全连接神经网络 FFN 中，得到最后一个 token 是否为绿列表中的元素。</p>
+<p>$$<br>W(x_{n-w+1:n}) &#x3D; FFN(E(x_{n-w+1})\oplus …\oplus E(x_{n}))<br>$$</p>
+<p>难点是如何让神经网络保持生成 $\gamma$ 比例的绿列表。</p>
+<h2 id="利用-z-检验进行水印检测"><a href="#利用-z-检验进行水印检测" class="headerlink" title="利用 z 检验进行水印检测"></a>利用 z 检验进行水印检测</h2><p>考虑神经网络不能严格生成 $\gamma$ 比例的绿列表，只能在期望上等于 $\gamma$，所以需要在 z 检验中考虑绿列表比例的方差。</p>
+<h2 id="利用神经网络进行水印检测"><a href="#利用神经网络进行水印检测" class="headerlink" title="利用神经网络进行水印检测"></a>利用神经网络进行水印检测</h2><p>采用二分类长短期记忆网络（LSTM）检测水印。</p>
+<h2 id="不可伪造性"><a href="#不可伪造性" class="headerlink" title="不可伪造性"></a>不可伪造性</h2><p>神经网络是不可逆的。很难根据输出推断输入。</p>
+<p>用水印生成模型的结果训练水印检测模型。但已知水印检测模型，很难反过来推测出水印生成模型的训练输入和输出。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"><i class="fa fa-tag"></i> LLM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/06/30/2024/06/30/103754/" rel="prev" title="ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记">
+                  <i class="fa fa-angle-left"></i> ADVANCING BEYOND IDENTIFICATION: MULTI-BIT WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/07/05/2024/07/05/123011/" rel="next" title="Next.js 认证 / 授权 / 登录">
+                  Next.js 认证 / 授权 / 登录 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tzh21</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

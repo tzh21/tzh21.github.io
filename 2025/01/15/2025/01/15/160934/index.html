@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tzh21.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文是对 Attention is All You Need 这篇论文的一篇随笔，简单记录了对 Transformer 架构中概念的理解。 Attention 函数Q 形状 (n, dk)，K 形状 (m, dk)，V 形状 (m, dv)。以机器翻译为例，n 的含义是目标语句的长度，m 的含义是源语句的长度。 Attention 函数将 Q, K, V 映射成一个形状为 (n, dv) 的矩阵，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Attention is All You Need 论文笔记">
+<meta property="og:url" content="https://tzh21.github.io/2025/01/15/2025/01/15/160934/index.html">
+<meta property="og:site_name" content="tzh21&#39;s Blog">
+<meta property="og:description" content="本文是对 Attention is All You Need 这篇论文的一篇随笔，简单记录了对 Transformer 架构中概念的理解。 Attention 函数Q 形状 (n, dk)，K 形状 (m, dk)，V 形状 (m, dv)。以机器翻译为例，n 的含义是目标语句的长度，m 的含义是源语句的长度。 Attention 函数将 Q, K, V 映射成一个形状为 (n, dv) 的矩阵，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tzh21.github.io/2025/01/15/2025/01/15/160934/image.png">
+<meta property="article:published_time" content="2025-01-15T08:09:34.000Z">
+<meta property="article:modified_time" content="2025-01-27T03:30:03.004Z">
+<meta property="article:author" content="tzh21">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tzh21.github.io/2025/01/15/2025/01/15/160934/image.png">
+
+
+<link rel="canonical" href="https://tzh21.github.io/2025/01/15/2025/01/15/160934/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://tzh21.github.io/2025/01/15/2025/01/15/160934/","path":"2025/01/15/2025/01/15/160934/","title":"Attention is All You Need 论文笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Attention is All You Need 论文笔记 | tzh21's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tzh21's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention-%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">Attention 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer-%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">Transformer 架构</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tzh21</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzh21.github.io/2025/01/15/2025/01/15/160934/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tzh21">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Attention is All You Need 论文笔记 | tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Attention is All You Need 论文笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-01-15 16:09:34" itemprop="dateCreated datePublished" datetime="2025-01-15T16:09:34+08:00">2025-01-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-01-27 11:30:03" itemprop="dateModified" datetime="2025-01-27T11:30:03+08:00">2025-01-27</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文是对 Attention is All You Need 这篇论文的一篇随笔，简单记录了对 Transformer 架构中概念的理解。</p>
+<h2 id="Attention-函数"><a href="#Attention-函数" class="headerlink" title="Attention 函数"></a>Attention 函数</h2><p>Q 形状 (n, dk)，K 形状 (m, dk)，V 形状 (m, dv)。以机器翻译为例，n 的含义是目标语句的长度，m 的含义是源语句的长度。</p>
+<p>Attention 函数将 Q, K, V 映射成一个形状为 (n, dv) 的矩阵，代表目标语句的向量序列，其长度为目标语句长度，向量值为 V 每个向量加权和。</p>
+<h2 id="Transformer-架构"><a href="#Transformer-架构" class="headerlink" title="Transformer 架构"></a>Transformer 架构</h2><p><img src="/2025/01/15/2025/01/15/160934/image.png" alt="架构"></p>
+<p>在编码器和解码器的第一个注意力层，输入同时作为 Q, K, V，这种机制被称为自注意力机制。</p>
+<p>假设输入的序列长度为 n，向量维度为 d。输出序列长度为 m。</p>
+<p>对于编码器的注意力层，由于自注意力机制，输入和输出长度和向量维度是一样的。因此输出实际上是输入的加权和，并且同一个位置的权重最大，如果输入序列中有其他向量和该位置的向量类似，则也会有较大的权重。</p>
+<p>对于解码器的第一个注意力层，同样由于自注意力机制，输出也是输入的加权和。但需要注意这里加了掩码，所以当前时刻后面的权重全部为 0。</p>
+<p>对于解码器的第二个注意力层，其 K, V 来自于编码器，其 Q 来自于解码器的上一个注意力层。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/14/2025/01/14/214508/" rel="prev" title="Learning Transferable Visual Models From Natural Language Supervision 论文笔记">
+                  <i class="fa fa-angle-left"></i> Learning Transferable Visual Models From Natural Language Supervision 论文笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/01/16/2025/01/16/135022/" rel="next" title="An Image is Worth 16x16 Words - Transformers for Image Recognition at Scale">
+                  An Image is Worth 16x16 Words - Transformers for Image Recognition at Scale <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tzh21</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

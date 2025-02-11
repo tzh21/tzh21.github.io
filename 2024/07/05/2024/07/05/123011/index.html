@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tzh21.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="概念认证（Authentication）：服务器识别用户的身份。 授权（Authorization）：在认证之后，服务器根据用户的身份，决定该用户可以访问哪些资源。 实现认证123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051import NextAuth from">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Next.js 认证 &#x2F; 授权 &#x2F; 登录">
+<meta property="og:url" content="https://tzh21.github.io/2024/07/05/2024/07/05/123011/index.html">
+<meta property="og:site_name" content="tzh21&#39;s Blog">
+<meta property="og:description" content="概念认证（Authentication）：服务器识别用户的身份。 授权（Authorization）：在认证之后，服务器根据用户的身份，决定该用户可以访问哪些资源。 实现认证123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051import NextAuth from">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-07-05T04:30:12.000Z">
+<meta property="article:modified_time" content="2025-01-14T06:41:36.454Z">
+<meta property="article:author" content="tzh21">
+<meta property="article:tag" content="Front End">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tzh21.github.io/2024/07/05/2024/07/05/123011/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://tzh21.github.io/2024/07/05/2024/07/05/123011/","path":"2024/07/05/2024/07/05/123011/","title":"Next.js 认证 / 授权 / 登录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Next.js 认证 / 授权 / 登录 | tzh21's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tzh21's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E8%AE%A4%E8%AF%81"><span class="nav-number">2.</span> <span class="nav-text">实现认证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%8E%88%E6%9D%83"><span class="nav-number">3.</span> <span class="nav-text">实现授权</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tzh21</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzh21.github.io/2024/07/05/2024/07/05/123011/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tzh21">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Next.js 认证 / 授权 / 登录 | tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Next.js 认证 / 授权 / 登录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-07-05 12:30:12" itemprop="dateCreated datePublished" datetime="2024-07-05T12:30:12+08:00">2024-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-01-14 14:41:36" itemprop="dateModified" datetime="2025-01-14T14:41:36+08:00">2025-01-14</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>认证（Authentication）：服务器识别用户的身份。</p>
+<p>授权（Authorization）：在认证之后，服务器根据用户的身份，决定该用户可以访问哪些资源。</p>
+<h2 id="实现认证"><a href="#实现认证" class="headerlink" title="实现认证"></a>实现认证</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">NextAuth</span> <span class="keyword">from</span> <span class="string">&#x27;next-auth&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Credentials</span> <span class="keyword">from</span> <span class="string">&#x27;next-auth/providers/credentials&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; sql &#125; <span class="keyword">from</span> <span class="string">&#x27;@vercel/postgres&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; z &#125; <span class="keyword">from</span> <span class="string">&#x27;zod&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">User</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@/app/lib/definitions&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 推荐使用 bcryptjs 包而不是 bcrypt 包。使用 bcrypt 包时可能会遇到错误，参考 https://github.com/kelektiv/node.bcrypt.js/issues/1017</span></span><br><span class="line"><span class="keyword">const</span> bcrypt = <span class="built_in">require</span>(<span class="string">&#x27;bcryptjs&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从数据库中获取指定 email 的用户，用于后续的比对</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">getUser</span>(<span class="params">email: <span class="built_in">string</span></span>): <span class="title class_">Promise</span>&lt;<span class="title class_">User</span> | <span class="literal">undefined</span>&gt; &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> user = <span class="keyword">await</span> sql&lt;<span class="title class_">User</span>&gt;<span class="string">`SELECT * FROM users WHERE email=<span class="subst">$&#123;email&#125;</span>`</span>;</span><br><span class="line">    <span class="keyword">return</span> user.<span class="property">rows</span>[<span class="number">0</span>];</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Failed to fetch user:&#x27;</span>, error);</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Failed to fetch user.&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// next-auth 提供了一系列处理认证的成熟套件，只需要提供一些必要的参数即可。尽可能使用这些套件而不是手搓。</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> &#123; auth, signIn, signOut &#125; = <span class="title class_">NextAuth</span>(&#123;</span><br><span class="line">  <span class="attr">pages</span>: &#123;</span><br><span class="line">    <span class="attr">signIn</span>: <span class="string">&#x27;/login&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 认证的逻辑。可以添加多个认证提供方，这里使用最原始的账号密码认证 Credentials。</span></span><br><span class="line">  <span class="attr">providers</span>: [</span><br><span class="line">    <span class="title class_">Credentials</span>(&#123;</span><br><span class="line">      <span class="comment">// credentials 包含账号和密码，将其与数据库中的进行对比。</span></span><br><span class="line">      <span class="comment">// 如果对比成功，返回数据库中的账户，如果对比失败，返回 null。</span></span><br><span class="line">      <span class="keyword">async</span> <span class="title function_">authorize</span>(<span class="params">credentials</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> parsedCredentials = z</span><br><span class="line">          .<span class="title function_">object</span>(&#123; <span class="attr">email</span>: z.<span class="title function_">string</span>().<span class="title function_">email</span>(), <span class="attr">password</span>: z.<span class="title function_">string</span>().<span class="title function_">min</span>(<span class="number">6</span>) &#125;)</span><br><span class="line">          .<span class="title function_">safeParse</span>(credentials);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parsedCredentials.<span class="property">success</span>) &#123;</span><br><span class="line">          <span class="keyword">const</span> &#123; email, password &#125; = parsedCredentials.<span class="property">data</span>;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">const</span> user = <span class="keyword">await</span> <span class="title function_">getUser</span>(email);</span><br><span class="line">          <span class="keyword">if</span> (!user) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">const</span> passwordsMatch = <span class="keyword">await</span> bcrypt.<span class="title function_">compare</span>(password, user.<span class="property">password</span>);</span><br><span class="line">          <span class="keyword">if</span> (passwordsMatch) <span class="keyword">return</span> user;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Invalid credentials&#x27;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;),</span><br><span class="line">  ]</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>前端登录表单 </p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; signIn &#125; <span class="keyword">from</span> <span class="string">&#x27;@/auth&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useActionState &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 提交登录表单</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">authenticate</span>(<span class="params"></span></span><br><span class="line"><span class="params">  prevState: <span class="built_in">string</span> | <span class="literal">undefined</span>,</span></span><br><span class="line"><span class="params">  formData: FormData,</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 这里用到了 next-auth 的登录组件</span></span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">signIn</span>(<span class="string">&#x27;credentials&#x27;</span>, formData);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">if</span> (error <span class="keyword">instanceof</span> <span class="title class_">AuthError</span>) &#123;</span><br><span class="line">      <span class="keyword">switch</span> (error.<span class="property">type</span>) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;CredentialsSignin&#x27;</span>:</span><br><span class="line">          <span class="keyword">return</span> <span class="string">&#x27;Invalid credentials.&#x27;</span>;</span><br><span class="line">        <span class="attr">default</span>:</span><br><span class="line">          <span class="keyword">return</span> <span class="string">&#x27;Something went wrong.&#x27;</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> error;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">LoginForm</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [errorMessage, formAction, isPending] = <span class="title function_">useActionState</span>(</span><br><span class="line">    authenticate,</span><br><span class="line">    <span class="literal">undefined</span>,</span><br><span class="line">  );</span><br><span class="line">  ...</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&#123;formAction&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">input</span>&gt;</span>...<span class="tag">&lt;/<span class="name">input</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">input</span>&gt;</span>...<span class="tag">&lt;/<span class="name">input</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="实现授权"><a href="#实现授权" class="headerlink" title="实现授权"></a>实现授权</h2><p>授权是通过 Next.js 的中间件机制完成的。</p>
+<p>根目录 <code>middleware.ts</code>，文件名不能自定义。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; auth &#125; <span class="keyword">from</span> <span class="string">&quot;@/auth&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">auth</span>(<span class="function">(<span class="params">req</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!req.<span class="property">auth</span> &amp;&amp; req.<span class="property">nextUrl</span>.<span class="property">pathname</span> !== <span class="string">&quot;/login&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> newUrl = <span class="keyword">new</span> <span class="title function_">URL</span>(<span class="string">&quot;/login&quot;</span>, req.<span class="property">nextUrl</span>.<span class="property">origin</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Response</span>.<span class="title function_">redirect</span>(newUrl)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (req.<span class="property">auth</span> &amp;&amp; !req.<span class="property">nextUrl</span>.<span class="property">pathname</span>.<span class="title function_">startsWith</span>(<span class="string">&quot;/dashboard&quot;</span>)) &#123;</span><br><span class="line">    <span class="keyword">const</span> newUrl = <span class="keyword">new</span> <span class="title function_">URL</span>(<span class="string">&quot;/dashboard&quot;</span>, req.<span class="property">nextUrl</span>.<span class="property">origin</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Response</span>.<span class="title function_">redirect</span>(newUrl)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 必需；让前端页面可以正常地访问图片等资源，无需认证。</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> config = &#123;</span><br><span class="line">  <span class="attr">matcher</span>: [<span class="string">&quot;/((?!api|_next/static|_next/image|favicon.ico).*)&quot;</span>],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Front-End/" rel="tag"><i class="fa fa-tag"></i> Front End</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/06/30/2024/06/30/214148/" rel="prev" title="AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记">
+                  <i class="fa fa-angle-left"></i> AN UNFORGEABLE PUBLICLY VERIFIABLE WATERMARK FOR LARGE LANGUAGE MODELS 论文笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/07/05/2024/07/05/232745/" rel="next" title="使用 Hexo Next 主题搭建前端博客">
+                  使用 Hexo Next 主题搭建前端博客 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tzh21</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

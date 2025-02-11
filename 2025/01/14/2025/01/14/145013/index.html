@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tzh21.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文是对 Meta SAM 论文的一篇随笔，主要记录了文章带来的启发。 概览这篇工作的主题是图像分割。主要贡献有：  提出任务 promptable segmentation task：在有提示的情况下进行图像分割。 模型 SAM：能够根据提示快速生成掩码。 数据引擎：可以自动生成掩码数据用于训练模型。 数据集 SA-1B：1B 大小的掩码数据集。  任务*新任务是本文的亮点之一。本文提出了一个新">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Segment Anything 论文笔记">
+<meta property="og:url" content="https://tzh21.github.io/2025/01/14/2025/01/14/145013/index.html">
+<meta property="og:site_name" content="tzh21&#39;s Blog">
+<meta property="og:description" content="本文是对 Meta SAM 论文的一篇随笔，主要记录了文章带来的启发。 概览这篇工作的主题是图像分割。主要贡献有：  提出任务 promptable segmentation task：在有提示的情况下进行图像分割。 模型 SAM：能够根据提示快速生成掩码。 数据引擎：可以自动生成掩码数据用于训练模型。 数据集 SA-1B：1B 大小的掩码数据集。  任务*新任务是本文的亮点之一。本文提出了一个新">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tzh21.github.io/2025/01/14/2025/01/14/145013/image.png">
+<meta property="og:image" content="https://tzh21.github.io/2025/01/14/2025/01/14/145013/image-1.png">
+<meta property="article:published_time" content="2025-01-14T06:50:13.000Z">
+<meta property="article:modified_time" content="2025-01-15T11:39:07.664Z">
+<meta property="article:author" content="tzh21">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tzh21.github.io/2025/01/14/2025/01/14/145013/image.png">
+
+
+<link rel="canonical" href="https://tzh21.github.io/2025/01/14/2025/01/14/145013/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://tzh21.github.io/2025/01/14/2025/01/14/145013/","path":"2025/01/14/2025/01/14/145013/","title":"Segment Anything 论文笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Segment Anything 论文笔记 | tzh21's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tzh21's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.</span> <span class="nav-text">任务*</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BC%95%E6%93%8E"><span class="nav-number">4.</span> <span class="nav-text">数据引擎*</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E6%A0%B7%E6%9C%AC%E8%BF%81%E7%A7%BB"><span class="nav-number">5.</span> <span class="nav-text">零样本迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8F%91"><span class="nav-number">6.</span> <span class="nav-text">启发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-number">7.</span> <span class="nav-text">需要学习的地方</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tzh21</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://tzh21.github.io/2025/01/14/2025/01/14/145013/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tzh21">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Segment Anything 论文笔记 | tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Segment Anything 论文笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-01-14 14:50:13" itemprop="dateCreated datePublished" datetime="2025-01-14T14:50:13+08:00">2025-01-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-01-15 19:39:07" itemprop="dateModified" datetime="2025-01-15T19:39:07+08:00">2025-01-15</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文是对 Meta SAM 论文的一篇随笔，主要记录了文章带来的启发。</p>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p>这篇工作的主题是图像分割。主要贡献有：</p>
+<ul>
+<li>提出任务 promptable segmentation task：在有提示的情况下进行图像分割。</li>
+<li>模型 SAM：能够根据提示快速生成掩码。</li>
+<li>数据引擎：可以自动生成掩码数据用于训练模型。</li>
+<li>数据集 SA-1B：1B 大小的掩码数据集。</li>
+</ul>
+<h2 id="任务"><a href="#任务" class="headerlink" title="任务*"></a>任务*</h2><p>新任务是本文的亮点之一。本文提出了一个新任务：在有提示的情况下进行图像分割。提示的灵感来自于 NLP 领域。</p>
+<p>本文使用的提示包括前景点（如鼠标点击）、粗略的框、文本。如下图所示</p>
+<p><img src="/2025/01/14/2025/01/14/145013/image.png"></p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>本文的模型比较简单，基本是由之前的模型改造+组装得到的。</p>
+<p>模型大致结构如图</p>
+<p><img src="/2025/01/14/2025/01/14/145013/image-1.png" alt="alt text"></p>
+<h2 id="数据引擎"><a href="#数据引擎" class="headerlink" title="数据引擎*"></a>数据引擎*</h2><p>数据引擎实际上就是通过原始图像生成掩码数据的一套流程。数据引擎也是本文的一大亮点，具体有以下几个开创性成就：</p>
+<ul>
+<li>本文一共生成了 1B 的掩码数据。这大概是 COCO 的一万倍。</li>
+<li>这么多数据其中有九成是完全自动生成的，剩下的部分也有计算机辅助。这极大减少了人工数据标注的工作量。</li>
+<li>数据引擎不局限于某个特定的数据集，可以应用于任意的图片。</li>
+</ul>
+<h2 id="零样本迁移"><a href="#零样本迁移" class="headerlink" title="零样本迁移"></a>零样本迁移</h2><p>文章在这一块做了很多论述，但是因为主要在说明效果而不是原理，所以我没有细看。</p>
+<h2 id="启发"><a href="#启发" class="headerlink" title="启发"></a>启发</h2><p>这篇帖子从 data-centric AI 的角度解读了 SAM 的意义。我觉得很有启发性。</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/593888697/answer/2972047807">https://www.zhihu.com/question/593888697/answer/2972047807</a></p>
+<p>总的来说有以下几点启发：</p>
+<ul>
+<li>数据是目前 AI 研究的瓶颈和重心之一。我们需要更好、更多、更快的数据。</li>
+<li>我们应该有一种系统化的方法获取和处理数据，比如本文的数据引擎。</li>
+</ul>
+<h2 id="需要学习的地方"><a href="#需要学习的地方" class="headerlink" title="需要学习的地方"></a>需要学习的地方</h2><ul>
+<li>ViT</li>
+<li>CLIP</li>
+<li>零样本迁移</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/10/03/2024/10/03/133237/" rel="prev" title="Docker, Kubernetes 网络问题">
+                  <i class="fa fa-angle-left"></i> Docker, Kubernetes 网络问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/01/14/2025/01/14/214508/" rel="next" title="Learning Transferable Visual Models From Natural Language Supervision 论文笔记">
+                  Learning Transferable Visual Models From Natural Language Supervision 论文笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">tzh21</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
