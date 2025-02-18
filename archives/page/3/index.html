@@ -149,6 +149,86 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tzh21.github.io/2024/06/28/2024/06/28/000001/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tzh21">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | tzh21's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/06/28/2024/06/28/000001/" class="post-title-link" itemprop="url">在 Conda 环境下使用 pip</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-06-28 15:47:30" itemprop="dateCreated datePublished" datetime="2024-06-28T15:47:30+08:00">2024-06-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-01-14 14:41:36" itemprop="dateModified" datetime="2025-01-14T14:41:36+08:00">2025-01-14</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="问题：pip-安装模块后无法使用"><a href="#问题：pip-安装模块后无法使用" class="headerlink" title="问题：pip 安装模块后无法使用"></a>问题：pip 安装模块后无法使用</h2><p>在 conda 虚拟环境中，使用 <code>pip install xxx</code> 后仍然无法使用该模块。</p>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>原因可能是使用的 <code>pip</code> 不是当前 <code>conda</code> 环境中的 <code>pip</code>。</p>
+<p>使用 <code>which python</code> 检查 python 路径。应该输出 conda 环境中的 python 路径。格式类似于 <code>/home/&lt;username&gt;/miniconda3/envs/&lt;env_name&gt;/bin/python</code></p>
+<p>使用 <code>which pip</code> 检查 pip 路径。如果输出的不是 <code>/home/&lt;username&gt;/miniconda3/envs/&lt;env_name&gt;/bin/pip</code>（我这里是 <code>/home/markllm/.local/bin/pip</code>，也就是本地 python 的 pip），说明 <code>pip</code> 不是当前 <code>conda</code> 环境中的 <code>pip</code>。</p>
+<p>使用 <code>python -m pip install xxx</code> 替代 <code>pip install</code>，就能指定使用当前 conda 环境中的 pip。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://tzh21.github.io/2024/06/28/2024/06/28/000002/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
